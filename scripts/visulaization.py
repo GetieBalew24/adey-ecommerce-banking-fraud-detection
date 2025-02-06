@@ -141,3 +141,16 @@ class DataVisualizer:
 
         except Exception as e:
             logg.error(f"An error occurred while plotting feature distributions: {e}")
+    
+    def plot_box_plot(self, numerical_features):
+        """Plots box plots for the specified numerical features.
+
+        Args:
+            numerical_features (list): List of numerical feature names to plot.
+        """
+        plt.figure(figsize=(16, 5))
+        for i, feature in enumerate(numerical_features, 1):
+            plt.subplot(1, len(numerical_features), i)
+            sns.boxplot(self.data[feature])
+            plt.title(f'Box Plot for {feature}')
+            plt.xlabel(feature)
