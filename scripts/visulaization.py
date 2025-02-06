@@ -89,3 +89,14 @@ class DataVisualizer:
         plt.tight_layout()
         plt.show()
         logg.info("Scatter matrix plotted successfully!")
+    def plot_correlation_matrix(self, numerical_features):
+        """Plots a heatmap of the correlation matrix for specified numerical features.
+
+        Args:
+            numerical_features (list): List of numerical feature names to include in the correlation matrix.
+        """
+        corr_matrix = self.data[numerical_features].corr()
+        sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt=".2f")
+        plt.title('Correlation Matrix')
+        plt.show()
+        logg.info("Correlation matrix plotted successfully!")
