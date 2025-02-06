@@ -39,3 +39,11 @@ class DataPreprocessor:
         """
         logg.info("Exploring data:")
         logg.info(f"\n{self.data.head()}")
+        
+    def check_missing_values(self, data):
+        """
+        Check for missing values in the provided dataset.
+        """
+        missing_values = data.isnull().sum()
+        logg.info(f"Missing values: \n{missing_values}")
+        return missing_values
