@@ -33,3 +33,9 @@ class DataPreprocessor:
         except Exception as e:
             logg.error(f"An error occurred while loading data: {e}")
             return None, None, None
+    def explore_data(self):
+        """
+        Display the first few rows of the main dataset for exploration purposes.
+        """
+        logg.info("Exploring data:")
+        logg.info(f"\n{self.data.head()}")
