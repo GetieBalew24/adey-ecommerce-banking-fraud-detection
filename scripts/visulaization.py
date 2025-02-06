@@ -77,3 +77,15 @@ class DataVisualizer:
             logg.info("Bar charts plotted successfully!")
         except Exception as e:
             logg.error(f"An error occurred while plotting bar charts: {e}")
+    def plot_scatter_matrix(self, numerical_features):
+        """Plots a scatter matrix for the specified numerical features.
+
+        Args:
+            numerical_features (list): List of numerical feature names to plot.
+        """
+        plt.figure(figsize=(16, 10))
+        sns.pairplot(self.data[numerical_features], palette='viridis')
+        plt.title('Scatter Matrix')
+        plt.tight_layout()
+        plt.show()
+        logg.info("Scatter matrix plotted successfully!")
