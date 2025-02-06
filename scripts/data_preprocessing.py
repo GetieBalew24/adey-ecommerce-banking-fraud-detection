@@ -39,7 +39,7 @@ class DataPreprocessor:
         """
         logg.info("Exploring data:")
         logg.info(f"\n{self.data.head()}")
-        
+
     def check_missing_values(self, data):
         """
         Check for missing values in the provided dataset.
@@ -47,3 +47,14 @@ class DataPreprocessor:
         missing_values = data.isnull().sum()
         logg.info(f"Missing values: \n{missing_values}")
         return missing_values
+    def handle_missing_values(self):
+        """
+        Handle missing values in numerical columns by imputing with the column mean.
+        """
+        num_cols = self.data.select_dtypes(include=[np.number]).columns
+        if self.data[num_cols].isnull().sum().any():
+            self.data[num_cols] = self.data[num_cols].fillna(self.data[num_cols].mean())
+            logg.info("Missing values in numerical columns handled with mean imputation.")
+        else:
+            logg.info("No missing values found in numerical columns.")
+        return self.data
