@@ -100,3 +100,44 @@ class DataVisualizer:
         plt.title('Correlation Matrix')
         plt.show()
         logg.info("Correlation matrix plotted successfully!")
+    def plot_distribution_with_class(self, features: list, target: str, feature_type: str = 'numerical'):
+        """Plots the distribution of specified features with respect to the target class.
+
+        Args:
+            features (list): List of features to plot.
+            target (str): The target variable (class).
+            feature_type (str): Type of features ('numerical' or 'categorical'). Defaults to 'numerical'.
+        """
+        try:
+            num_features = len(features)
+            num_cols = min(num_features, 2)
+            num_rows = (num_features + num_cols - 1) // num_cols
+
+            plt.figure(figsize=(num_cols * 5, num_rows * 4))
+
+            for i, feature in enumerate(features, 1):
+                if feature not in self.data.columns or target not in self.data.columns:
+                    logg.error(f"Feature '{feature}' or target '{target}' not found in data!")
+                    continue
+
+                plt.subplot(num_rows, num_cols, i)
+
+                if feature_type == 'numerical':
+                    sns.histplot(data=self.data, x=feature, hue=target, bins=20, kde=True, palette="viridis", element="step")
+                    plt.title(f'Distribution of {feature} by {target}')
+                    plt.xlabel(feature)
+                    plt.ylabel('Frequency')
+
+                elif feature_type == 'categorical':
+                    sns.countplot(x=feature, hue=target, data=self.data, palette="viridis")
+                    plt.title(f'Distribution of {feature} by {target}')
+                    plt.xlabel(feature)
+                    plt.ylabel('Count')
+
+            plt.tight_layout()
+            plt.show()
+
+            logg.info("Feature distributions with respect to target class plotted successfully!")
+
+        except Exception as e:
+            logg.error(f"An error occurred while plotting feature distributions: {e}")
