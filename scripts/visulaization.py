@@ -154,3 +154,17 @@ class DataVisualizer:
             sns.boxplot(self.data[feature])
             plt.title(f'Box Plot for {feature}')
             plt.xlabel(feature)
+    def scatter_plot(self, x_feature, y_feature):
+        """Plots a scatter plot for two specified features.
+
+        Args:
+            x_feature (str): The feature for the x-axis.
+            y_feature (str): The feature for the y-axis.
+        """
+        logg.info("Plotting scatter plot...")
+        plt.figure(figsize=(8, 6))
+        sns.scatterplot(x=self.data[x_feature], y=self.data[y_feature], palette='viridis')
+        plt.title(f'Scatter Plot: {x_feature} vs {y_feature}')
+        plt.xlabel(x_feature)
+        plt.ylabel(y_feature)
+        plt.show()
