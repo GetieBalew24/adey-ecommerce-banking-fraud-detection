@@ -110,3 +110,17 @@ class DataPreprocessor:
 
         logg.info("Transaction features calculated and merged.")
         return df
+    def normalize_data(self, data, columns):
+        """
+        Normalize specified numerical columns of the dataset using Min-Max scaling.
+        """
+        logg.info("Normalizing data...")
+        if all(col in data.columns for col in columns):
+            scaler = MinMaxScaler()
+            data[columns] = scaler.fit_transform(data[columns])
+            logg.info("Dataset normalized successfully using Min-Max scaling.")
+            return data
+        else:
+            missing_cols = [col for col in columns if col not in data.columns]
+            logg.error(f"Missing columns for normalization: {missing_cols}")
+            return data
