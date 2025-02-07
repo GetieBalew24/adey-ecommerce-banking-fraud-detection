@@ -77,3 +77,36 @@ class DataPreprocessor:
         # self.calculate_transaction_features(merged_data)
         
         return merged_data
+    
+    def calculate_transaction_features(self, df):
+        """
+        Calculate transaction frequency and velocity for each user.
+        """
+        logg.info("Calculating transaction frequency and velocity...")
+        
+        # Transaction frequency
+        transaction_frequency = df['user_id'].value_counts().reset_index()
+        transaction_frequency.columns = ['user_id', 'transaction_frequency']
+        
+        # Calculate time differences
+        df = df.sort_values(by=['user_id', 'purchase_time'])
+        df['time_diff'] = df.groupby('user_id')['purchase_time'].diff().dt.total_seconds()
+        
+        # Handle NaN values in time_diff by filling with 0 or forward filling
+        df['time_diff'].fillna(0, inplace=True)  # Filling NaN with 0 for first transaction
+
+        # Transaction velocity (average time between transactions)
+        transaction_velocity = df.groupby('user_id')['time_diff'].mean().reset_index()
+        transaction_velocity.columns = ['user_id', 'average_velocity']
+        
+        # Merge frequency and velocity back to the main DataFrame
+        df = df.merge(transaction_frequency, on='user_id', how='left')
+        df = df.merge(transaction_velocity, on='user_id', how='left')
+
+        # Handle NaN values in average_velocity
+        # Fill NaN values with the overall mean or any other preferred method
+        overall_mean_velocity = df['average_velocity'].mean()
+        df['average_velocity'].fillna(overall_mean_velocity, inplace=True)
+
+        logg.info("Transaction features calculated and merged.")
+        return df
