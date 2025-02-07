@@ -53,3 +53,21 @@ class GeolocationFraudAnalysis:
         plt.show()
 
         logging.info("Top 10 countries by fraud rate bar chart displayed.")
+    
+    def visualize_fraud_distribution(self, fraud_rate_by_country):
+        """
+        Visualize overall fraud distribution using a pie chart.
+        """
+        logging.info("Visualizing overall fraud distribution.")
+        
+        # Calculate total fraud and non-fraud counts
+        fraud_counts = self.data['class'].value_counts()
+        labels = ['Non-Fraud', 'Fraud']
+        
+        plt.figure(figsize=(8, 8))
+        plt.pie(fraud_counts, labels=labels, autopct='%1.1f%%', startangle=90, colors=['lightblue', 'salmon'])
+        plt.title('Overall Fraud Distribution')
+        plt.axis('equal')  # Equal aspect ratio ensures that pie chart is circular.
+        plt.show()
+
+        logging.info("Overall fraud distribution pie chart displayed.")
