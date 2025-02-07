@@ -58,3 +58,22 @@ class DataPreprocessor:
         else:
             logg.info("No missing values found in numerical columns.")
         return self.data
+    def feature_engineering(self, merged_data):
+        """
+        Perform feature engineering on the dataset by creating new features based on existing columns.
+        """
+        logg.info("Performing feature engineering...")
+
+        # Ensure 'purchase_time' is a valid datetime
+        merged_data['purchase_time'] = pd.to_datetime(merged_data['purchase_time'], errors='coerce')
+
+        # Create 'hour_of_day' and 'day_of_week' features
+        merged_data['hour_of_day'] = merged_data['purchase_time'].dt.hour
+        merged_data['day_of_week'] = merged_data['purchase_time'].dt.dayofweek  # 0=Monday, 6=Sunday
+
+        logg.info("Feature engineering completed: added 'hour_of_day' and 'day_of_week'.")
+        
+        # Calculate transaction frequency and velocity
+        # self.calculate_transaction_features(merged_data)
+        
+        return merged_data
