@@ -124,3 +124,23 @@ class DataPreprocessor:
             missing_cols = [col for col in columns if col not in data.columns]
             logg.error(f"Missing columns for normalization: {missing_cols}")
             return data
+    def encode_categorical_data(self, df, cat_columns):
+        """
+        Perform one-hot encoding on specified categorical columns.
+        """
+        logg.info("Encoding categorical data...")
+        
+        if all(col in df.columns for col in cat_columns):
+            encoded_data = pd.get_dummies(df, columns=cat_columns, drop_first=True)
+            logg.info("Categorical data encoded successfully!")
+
+            # Convert only the newly created one-hot encoded columns to integers
+            one_hot_cols = [col for col in encoded_data.columns if col.startswith(tuple(cat_columns))]
+            encoded_data[one_hot_cols] = encoded_data[one_hot_cols].astype(int)
+            
+            return encoded_data
+        else:
+            missing_cols = [col for col in cat_columns if col not in df.columns]
+            logg.error(f"Missing columns for encoding: {missing_cols}")
+            return df  # Return unchanged data if categorical columns are missing
+
