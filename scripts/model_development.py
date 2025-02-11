@@ -84,3 +84,27 @@ class ModelPipeline:
             logging.info("Data has been split into train and test sets.")
         else:
             raise ValueError("Data not loaded. Please load the data first.")
+    def apply_smote(self):
+        """
+        Apply SMOTE (Synthetic Minority Over-sampling Technique) to balance the training data.
+
+        This method checks if the training data (X_train and y_train) is available. If available,
+        it applies SMOTE to the training data to handle class imbalance by generating synthetic
+        samples for the minority class. The balanced training data is then stored back in 
+        self.X_train and self.y_train.
+
+        Raises:
+            ValueError: If the training data is not available (i.e., X_train or y_train is None).
+
+        Logs:
+            Info: When SMOTE is being applied to the training data.
+            Info: After SMOTE has been successfully applied and the classes have been balanced.
+        """
+        """Apply SMOTE to balance the training data."""
+        if self.X_train is not None and self.y_train is not None:
+            logging.info("Applying SMOTE to the training data...")
+            smote = SMOTE(random_state=42)
+            self.X_train, self.y_train = smote.fit_resample(self.X_train, self.y_train)
+            logging.info("SMOTE applied to training data. Classes have been balanced.")
+        else:
+            raise ValueError("Training data is not available. Please split the data first.")
