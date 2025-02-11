@@ -73,3 +73,14 @@ class ModelPipeline:
             raise ValueError("Invalid dataset_type! Must be 'creditcard' or 'fraud'")
         
         logging.info("Data loading complete.")
+    def split_data(self, test_size=0.2, random_state=42):
+        """Split the loaded data into training and test sets."""
+        if self.data is not None:
+            X = self.data.drop(columns=[self.target])
+            y = self.data[self.target]
+            self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
+                X, y, test_size=test_size, random_state=random_state
+            )
+            logging.info("Data has been split into train and test sets.")
+        else:
+            raise ValueError("Data not loaded. Please load the data first.")
