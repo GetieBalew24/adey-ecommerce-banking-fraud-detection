@@ -22,3 +22,15 @@ class FraudDetectionInterpretability:
     def train_model(self):
         """Train the Random Forest model on the training data."""
         self.model.fit(self.X_train, self.y_train)
+    
+    def shap_summary_plot(self):
+        """Generate SHAP summary plot to visualize feature importance."""
+        if not self.shap_explainer:
+            self.shap_explainer = shap.Explainer(self.model,self.X_train)
+        
+        X_test_sample = self.X_test.sample(100, random_state=42)
+        shap_values = self.shap_explainer.shap_values(X_test_sample, check_additivity=False)
+        
+        # Summary plot for global feature importance
+        shap.summary_plot(shap_values[..., 1], X_test_sample)
+        return shap_values
